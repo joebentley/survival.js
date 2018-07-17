@@ -1,0 +1,20 @@
+{
+  "name": "survival",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-loader": "^8.0.0-beta",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-serve": "^2.0.2"
+  },
+  "scripts": {
+    "serve": "webpack-serve"
+  },
+  "serve": {
+    "content": "public"
+  }
+}
