@@ -18,7 +18,7 @@ export function makeWaitTickMessage() {
           fontText.fColor(`rgba(${timer * 255}, ${timer * 255}, ${timer * 255})`)
             .text(`Waited ${numTicksWaited} tick${numTicksWaited === 1 ? '' : 's'}`));
 
-        timer -= state.timeSinceLastDraw / 200000;
+        timer -= state.timeSinceLastDraw / 2000;
         state.drawTainted = true;
       } else {
         numTicksWaited = 0;

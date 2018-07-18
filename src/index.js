@@ -45,7 +45,8 @@ const getMaskedCanvas = (image, color) => {
 };
 
 const loop = (state, time) => {
-  state.timeSinceLastDraw = (time - state.timeSinceLastDraw) || 0;
+  state.timeSinceLastDraw = (time - state.timeAtLastDraw) || 0;
+  state.timeAtLastDraw = time;
 
   // state updates
 
