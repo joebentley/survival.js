@@ -10615,6 +10615,148 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/entity.js":
+/*!***********************!*\
+  !*** ./src/entity.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.wanderingBehaviour = wanderingBehaviour;
+exports.Cat = exports.Entity = void 0;
+
+var _font = __webpack_require__(/*! ./font */ "./src/font.js");
+
+var _point = __webpack_require__(/*! ./point */ "./src/point.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Entity =
+/*#__PURE__*/
+function () {
+  function Entity(worldPos, graphic) {
+    _classCallCheck(this, Entity);
+
+    this.worldPos = worldPos.round();
+    this.graphic = graphic;
+    this.behaviours = [];
+  }
+
+  _createClass(Entity, [{
+    key: "isOnScreen",
+    value: function isOnScreen(playerWorldPos) {
+      var scenePos = new _point.Point(Math.floor(playerWorldPos.x / _point.SCENE_WIDTH), Math.floor(playerWorldPos.y / _point.SCENE_HEIGHT));
+      return this.worldPos.x > scenePos.x * _point.SCENE_WIDTH && this.worldPos.y > scenePos.y * _point.SCENE_HEIGHT && this.worldPos.x < (scenePos.x + 1) * _point.SCENE_WIDTH && this.worldPos.y < (scenePos.y + 1) * _point.SCENE_HEIGHT;
+    }
+  }, {
+    key: "draw",
+    value: function draw(font, state) {
+      // TODO: Cache which entities are on screen?
+      if (!state || this.isOnScreen(state.player.worldPos)) {
+        var screenPos = this.worldPos.toScreenSpace();
+        font.drawText(screenPos.x, screenPos.y, this.graphic);
+      }
+    }
+  }, {
+    key: "update",
+    value: function update(state) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.behaviours[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var behaviour = _step.value;
+          Object.assign(state, behaviour(state));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return state;
+    }
+  }]);
+
+  return Entity;
+}();
+
+exports.Entity = Entity;
+
+var Cat =
+/*#__PURE__*/
+function (_Entity) {
+  _inherits(Cat, _Entity);
+
+  function Cat(worldPos) {
+    var _this;
+
+    _classCallCheck(this, Cat);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Cat).call(this, worldPos, _font.fontText.fColor('yellow').text('c')));
+
+    _this.behaviours.push(wanderingBehaviour.bind(_assertThisInitialized(_assertThisInitialized(_this))));
+
+    return _this;
+  }
+
+  return Cat;
+}(Entity);
+
+exports.Cat = Cat;
+
+function wanderingBehaviour(state) {
+  var _this2 = this;
+
+  var posOffset = new _point.Point(Math.random() < 0.2 ? Math.random() < 0.5 ? 1 : -1 : 0, Math.random() < 0.2 ? Math.random() < 0.5 ? 1 : -1 : 0);
+
+  if (!posOffset.equals(_point.Point.zero)) {
+    var entity = new this.constructor(this.worldPos.plus(posOffset));
+    var entities = state.entities.slice().filter(function (entity) {
+      return entity !== _this2;
+    }, this);
+    entities.push(entity);
+    return {
+      drawTainted: true,
+      entities: entities
+    };
+  }
+}
+
+/***/ }),
+
 /***/ "./src/font.js":
 /*!*********************!*\
   !*** ./src/font.js ***!
@@ -10786,8 +10928,8 @@ function () {
   }, {
     key: "drawChar",
     value: function drawChar(x, y, char) {
-      var fColor = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'white';
-      var bColor = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'black';
+      var fColor = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'none';
+      var bColor = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'transparent';
       if (this.characterCache == null) this.generateCharacterCache();
       if (char === ' ') char = 'space';
       var charSheetCoord = this.characterCache.get(char);
@@ -10802,10 +10944,14 @@ function () {
         char: char,
         fColor: fColor,
         bColor: bColor
-      }; // draw background color of character
+      };
 
-      this.ctx.fillStyle = bColor;
-      this.ctx.fillRect(x, y, rect.w, rect.h);
+      if (bColor !== 'none') {
+        // draw background color of character
+        this.ctx.fillStyle = bColor;
+        this.ctx.fillRect(x, y, rect.w, rect.h);
+      }
+
       if (this._canvasCache == null) this._canvasCache = new Map();
 
       if (!this._canvasCache.has(JSON.stringify(charObject))) {
@@ -10817,12 +10963,15 @@ function () {
         tempCtx.globalCompositeOperation = 'source-over';
         tempCtx.clearRect(0, 0, rect.w, rect.h); // draw the font character first
 
-        tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h); // only keep pixels that overlay the pixels of the character
+        tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h); // don't tint if fColor === 'none'
 
-        tempCtx.globalCompositeOperation = 'source-in';
-        tempCtx.fillStyle = fColor; // draw colored rectangle over the character, only pixels overlapping the character are kept
+        if (fColor !== 'none') {
+          // only keep pixels that overlay the pixels of the character
+          tempCtx.globalCompositeOperation = 'source-in';
+          tempCtx.fillStyle = fColor; // draw colored rectangle over the character, only pixels overlapping the character are kept
 
-        tempCtx.fillRect(0, 0, rect.w, rect.h);
+          tempCtx.fillRect(0, 0, rect.w, rect.h);
+        }
 
         this._canvasCache.set(JSON.stringify(charObject), tempCanvas);
       } // draw tinted character onto main canvas
@@ -10907,13 +11056,9 @@ var _world = __webpack_require__(/*! ./world */ "./src/world.js");
 
 var _player = __webpack_require__(/*! ./player */ "./src/player.js");
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+var _entity2 = __webpack_require__(/*! ./entity */ "./src/entity.js");
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+var _ui = __webpack_require__(/*! ./ui */ "./src/ui.js");
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -10977,8 +11122,10 @@ var getMaskedCanvas = function getMaskedCanvas(image, color) {
   return canvas;
 };
 
-var loop = function loop(state) {
-  // state updates
+var loop = function loop(state, time) {
+  state.timeSinceLastDraw = time - state.timeAtLastDraw || 0;
+  state.timeAtLastDraw = time; // state updates
+
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -11006,20 +11153,82 @@ var loop = function loop(state) {
     }
   }
 
+  if (state.updateEntities) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = state.entities[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var entity = _step2.value;
+        Object.assign(state, entity.update(state));
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    state.updateEntities = false;
+  }
+
   var font = state.font,
       world = state.world,
-      player = state.player; // drawing
+      player = state.player,
+      entities = state.entities,
+      ctx = state.ctx,
+      canvas = state.canvas; // drawing, only draw if state has been tainted
 
-  world.draw(font, new _point.Point(0, 0)); // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
-  // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+  if (state.drawTainted) {
+    state.drawTainted = false;
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    world.draw(font, state); // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+    // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+    // font.drawText(...Point.fromGridToScreen(2, 2),
+    //   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
-  font.drawText.apply(font, _toConsumableArray(_point.Point.fromGridToScreen(2, 2)).concat([_font.fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!')]));
-  player.draw(font);
-  requestAnimationFrame(loop.bind(null, {
-    font: font,
-    world: world,
-    player: player
-  }));
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = entities[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var _entity = _step3.value;
+
+        _entity.draw(font, state);
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+          _iterator3.return();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+
+    player.draw(font);
+    state.ui.waitTickMessage.draw(font, state);
+  }
+
+  requestAnimationFrame(function (time) {
+    return loop(state, time);
+  });
 };
 
 var pressedKeys = new Set();
@@ -11029,9 +11238,7 @@ window.onload = function () {
   canvas.width = _point.CHAR_WIDTH * _point.SCENE_WIDTH;
   canvas.height = _point.CHAR_HEIGHT * _point.SCENE_HEIGHT;
   var ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  var player = new _player.Player();
+  var player = new _player.Player(new _point.Point(_point.SCENE_WIDTH * (100 + 0.5), _point.SCENE_HEIGHT * (100 + 0.5)));
   loadImage('images/curses_800x600.bmp').then(function (image) {
     var maskedCanvas = getMaskedCanvas(image, {
       r: 255,
@@ -11039,12 +11246,18 @@ window.onload = function () {
       b: 255
     });
     var font = new _font.Font(maskedCanvas, ctx);
-    var world = new _world.World();
-    world.randomizeScene(new _point.Point(0, 0));
+    var entities = [new _entity2.Cat(player.worldPos.plus(new _point.Point(10, 10)))];
     loop({
       font: font,
-      world: world,
-      player: player
+      world: new _world.World(),
+      player: player,
+      entities: entities,
+      drawTainted: true,
+      canvas: canvas,
+      ctx: ctx,
+      ui: {
+        waitTickMessage: (0, _ui.makeWaitTickMessage)()
+      }
     });
   });
   document.addEventListener('keydown', function (event) {
@@ -11076,22 +11289,35 @@ exports.Player = void 0;
 
 var _point = __webpack_require__(/*! ./point */ "./src/point.js");
 
+var _entity = __webpack_require__(/*! ./entity */ "./src/entity.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 var Player =
 /*#__PURE__*/
-function () {
-  function Player() {
-    var worldPos = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new _point.Point(10, 10);
+function (_Entity) {
+  _inherits(Player, _Entity);
 
+  function Player(worldPos) {
     _classCallCheck(this, Player);
 
-    this.graphic = '$(dwarf)';
-    this.worldPos = worldPos;
+    return _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, worldPos, '$(dwarf)'));
   }
 
   _createClass(Player, [{
@@ -11100,19 +11326,16 @@ function () {
       var posOffset = new _point.Point(0, 0);
       if (key === 'h') posOffset = new _point.Point(-1, 0);else if (key === 'l') posOffset = new _point.Point(1, 0);else if (key === 'k') posOffset = new _point.Point(0, -1);else if (key === 'j') posOffset = new _point.Point(0, 1);else if (key === 'y') posOffset = new _point.Point(-1, -1);else if (key === 'u') posOffset = new _point.Point(1, -1);else if (key === 'b') posOffset = new _point.Point(-1, 1);else if (key === 'n') posOffset = new _point.Point(1, 1);
       return {
-        player: new Player(this.worldPos.plus(posOffset))
+        player: new Player(this.worldPos.plus(posOffset)),
+        drawTainted: !posOffset.equals(_point.Point.zero) || key === '.',
+        updateEntities: !posOffset.equals(_point.Point.zero) || key === '.',
+        manualTimeTick: key === '.'
       };
-    }
-  }, {
-    key: "draw",
-    value: function draw(font) {
-      var screenPos = this.worldPos.toScreenSpace();
-      font.drawText(screenPos.x, screenPos.y, this.graphic);
     }
   }]);
 
   return Player;
-}();
+}(_entity.Entity);
 
 exports.Player = Player;
 
@@ -11170,6 +11393,16 @@ function () {
       return new Point(this.x + other.x, this.y + other.y);
     }
   }, {
+    key: "equals",
+    value: function equals(other) {
+      return this.x === other.x && this.y === other.y;
+    }
+  }, {
+    key: "round",
+    value: function round() {
+      return new Point(Math.round(this.x), Math.round(this.y));
+    }
+  }, {
     key: "toScreenSpace",
     value: function toScreenSpace() {
       return new Point(this.x % SCENE_WIDTH * CHAR_WIDTH, this.y % SCENE_HEIGHT * CHAR_HEIGHT);
@@ -11208,6 +11441,51 @@ function () {
 }();
 
 exports.Point = Point;
+Point.zero = new Point(0, 0);
+
+/***/ }),
+
+/***/ "./src/ui.js":
+/*!*******************!*\
+  !*** ./src/ui.js ***!
+  \*******************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.makeWaitTickMessage = makeWaitTickMessage;
+
+var _point = __webpack_require__(/*! ./point */ "./src/point.js");
+
+var _font = __webpack_require__(/*! ./font */ "./src/font.js");
+
+function makeWaitTickMessage() {
+  var timer = 0;
+  var numTicksWaited = 0;
+  return {
+    draw: function draw(font, state) {
+      if (state.manualTimeTick) {
+        state.manualTimeTick = false;
+        numTicksWaited++;
+        timer = 1;
+      }
+
+      if (timer > 0) {
+        font.drawText((_point.SCENE_WIDTH - 17) * _point.CHAR_WIDTH, (_point.SCENE_HEIGHT - 3) * _point.CHAR_HEIGHT, _font.fontText.fColor("rgba(".concat(timer * 255, ", ").concat(timer * 255, ", ").concat(timer * 255, ")")).text("Waited ".concat(numTicksWaited, " tick").concat(numTicksWaited === 1 ? '' : 's')));
+        timer -= state.timeSinceLastDraw / 2000;
+        state.drawTainted = true;
+      } else {
+        numTicksWaited = 0;
+        timer = 0;
+      }
+    }
+  };
+}
 
 /***/ }),
 
@@ -11263,16 +11541,21 @@ function () {
 
   _createClass(World, [{
     key: "draw",
-    value: function draw(font) {
+    value: function draw(font, state) {
       var _this = this;
 
-      var cameraPos = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _point.Point(0, 0);
+      var player = state.player;
+      var cameraPos = new _point.Point(player.worldPos.x - player.worldPos.x % _point.SCENE_WIDTH, player.worldPos.y - player.worldPos.y % _point.SCENE_HEIGHT);
       scenePoints.forEach(function (point) {
         var tile = _this.floorTiles.get(JSON.stringify(cameraPos.plus(point)));
 
         if (tile == null) {
           var p = cameraPos.plus(point);
-          throw new Error("Error: tile not generated at point ".concat(p.x, ", ").concat(p.y));
+          var scenePoint = new _point.Point(Math.floor(p.x / _point.SCENE_WIDTH), Math.floor(p.y / _point.SCENE_HEIGHT)); // generate next scene
+
+          _this.randomizeScene(scenePoint);
+
+          tile = _this.floorTiles.get(JSON.stringify(cameraPos.plus(point)));
         }
 
         font.drawChar.apply(font, _toConsumableArray(point.toScreenSpace()).concat([tile, 'grey']));
