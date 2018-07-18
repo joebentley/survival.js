@@ -14,7 +14,8 @@
   },
   "scripts": {
     "serve": "webpack-serve",
-    "gh-pages": "cp -r public/* docs && cp dist/bundle.js docs"
+    "build": "webpack",
+    "gh-pages": "yarn run build && cp -r public/* docs && cp dist/bundle.js docs"
   },
   "serve": {
     "content": "public"

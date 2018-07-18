@@ -10628,11 +10628,11 @@ module.exports = g;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Font = exports.NUM_PER_ROW = exports.CHAR_WIDTH = exports.CHAR_HEIGHT = void 0;
+exports.Font = exports.UnknownCharacterError = exports.fontText = exports.FontText = exports.NUM_PER_ROW = void 0;
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+var _point = __webpack_require__(/*! ./point */ "./src/point.js");
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -10642,21 +10642,100 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null) return null; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var CHAR_HEIGHT = 12; // 20; // 12;
-
-exports.CHAR_HEIGHT = CHAR_HEIGHT;
-var CHAR_WIDTH = 10; // 20; // 8;
-
-exports.CHAR_WIDTH = CHAR_WIDTH;
 var NUM_PER_ROW = 16;
 exports.NUM_PER_ROW = NUM_PER_ROW;
 var CHARS = 'space dwarf dwarf2 heart diamond club spade circle emptycircle ring emptyring male female note1 note2 gem ' + 'sloperight slopeleft updown alert pagemark sectionmark thickbottom updown2 up down right left boxbottomleft leftright slopeup slopedown ' + 'space2 ! " # $ % & \' ( ) * + , - . / ' + '0 1 2 3 4 5 6 7 8 9 : ; < = > ? ' + '@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \\ ] ^ _ ' + '` a b c d e f g h i j k l m n o p q r s t u v w x y z { : } ~ triangle ' + 'accentC accentu accente accenta accenta2 accenta3 accenta4 accentc accente2 accente3 accente4 accenti accenti2 accenti3 accentA  accentA2 ' + 'accentE accentae accentAE accento accento2 accento3 accentu2 accentu3 accenty accentO accentU cent pound yen Pt function ' + 'accenta5 accenti4 accento4 accentu4 accentn accentN aoverbar ooverbar qmark2 boxtopleft boxtopright half quarter emark2 muchless muchgreater ' + 'shaded shaded2 shaded3 p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 ' + 'p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 ' + 'p30 p31 p32 p33 p34 p35 p36 p37 p38 p39 p40 p41 p42 p43 p44 p45 ' + 'alpha beta Gamma Pi Sigma sigma mu tau Phi theta Omega delta inf ninf in intersect ' + 'equiv pm gteq lteq upperint lowerint div approx degree cdot hyphen sqrt endquote power2 block space3';
+/**
+ * Example:
+ *
+ * font.drawText(
+ *   ...Point.fromGridToScreen(2, 2),
+ *   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+ */
+
+var FontText =
+/*#__PURE__*/
+function () {
+  function FontText(nodes) {
+    _classCallCheck(this, FontText);
+
+    this.nodes = nodes || [];
+  }
+
+  _createClass(FontText, [{
+    key: "text",
+    value: function text(_text) {
+      return new FontText(this.nodes.concat(_text));
+    }
+  }, {
+    key: "fColor",
+    value: function fColor(color) {
+      return new FontText(this.nodes.concat({
+        fColor: color
+      }));
+    }
+  }, {
+    key: "bColor",
+    value: function bColor(color) {
+      return new FontText(this.nodes.concat({
+        bColor: color
+      }));
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      return new FontText(this.nodes.concat({
+        fColor: 'white'
+      }, {
+        bColor: 'black'
+      }));
+    }
+  }]);
+
+  return FontText;
+}();
+
+exports.FontText = FontText;
+var fontText = new FontText();
+exports.fontText = fontText;
+
+var UnknownCharacterError =
+/*#__PURE__*/
+function (_Error) {
+  _inherits(UnknownCharacterError, _Error);
+
+  function UnknownCharacterError() {
+    _classCallCheck(this, UnknownCharacterError);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(UnknownCharacterError).apply(this, arguments));
+  }
+
+  return UnknownCharacterError;
+}(_wrapNativeSuper(Error));
+
+exports.UnknownCharacterError = UnknownCharacterError;
 
 var Font =
 /*#__PURE__*/
@@ -10685,8 +10764,8 @@ function () {
           var x = i % NUM_PER_ROW;
           var y = Math.floor(i / NUM_PER_ROW);
           this.characterCache.set(char, {
-            x: x * CHAR_WIDTH,
-            y: y * CHAR_HEIGHT
+            x: x * _point.CHAR_WIDTH,
+            y: y * _point.CHAR_HEIGHT
           });
         }
       } catch (err) {
@@ -10707,14 +10786,99 @@ function () {
   }, {
     key: "drawChar",
     value: function drawChar(x, y, char) {
+      var fColor = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'white';
+      var bColor = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'black';
       if (this.characterCache == null) this.generateCharacterCache();
+      if (char === ' ') char = 'space';
+      var charSheetCoord = this.characterCache.get(char);
+      if (charSheetCoord == null) throw new UnknownCharacterError("Invalid character ".concat(char));
+      var rect = {
+        x: charSheetCoord.x,
+        y: charSheetCoord.y,
+        w: _point.CHAR_WIDTH,
+        h: _point.CHAR_HEIGHT
+      };
+      var charObject = {
+        char: char,
+        fColor: fColor,
+        bColor: bColor
+      }; // draw background color of character
 
-      var rect = _objectSpread({}, this.characterCache.get(char), {
-        w: CHAR_WIDTH,
-        h: CHAR_HEIGHT
-      });
+      this.ctx.fillStyle = bColor;
+      this.ctx.fillRect(x, y, rect.w, rect.h);
+      if (this._canvasCache == null) this._canvasCache = new Map();
 
-      this.ctx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, x, y, rect.w, rect.h);
+      if (!this._canvasCache.has(JSON.stringify(charObject))) {
+        // temporary canvas for tinting each character
+        var tempCanvas = document.createElement('canvas');
+        tempCanvas.width = rect.w;
+        tempCanvas.height = rect.h;
+        var tempCtx = tempCanvas.getContext('2d');
+        tempCtx.globalCompositeOperation = 'source-over';
+        tempCtx.clearRect(0, 0, rect.w, rect.h); // draw the font character first
+
+        tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h); // only keep pixels that overlay the pixels of the character
+
+        tempCtx.globalCompositeOperation = 'source-in';
+        tempCtx.fillStyle = fColor; // draw colored rectangle over the character, only pixels overlapping the character are kept
+
+        tempCtx.fillRect(0, 0, rect.w, rect.h);
+
+        this._canvasCache.set(JSON.stringify(charObject), tempCanvas);
+      } // draw tinted character onto main canvas
+
+
+      this.ctx.drawImage(this._canvasCache.get(JSON.stringify(charObject)), x, y);
+    }
+  }, {
+    key: "drawText",
+    value: function drawText(x, y, text) {
+      if (typeof text === 'string') {
+        text = fontText.text(text);
+      }
+
+      var fColor, bColor;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = text.nodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var node = _step2.value;
+
+          if (typeof node === 'string') {
+            while (node.length > 0) {
+              var match = node.match(/^\$\(([\w\d]+)\)/);
+
+              if (match != null) {
+                node = node.slice(match[0].length);
+                this.drawChar(x, y, match[1], fColor, bColor);
+              } else {
+                this.drawChar(x, y, node[0], fColor, bColor);
+                node = node.slice(1);
+              }
+
+              x += _point.CHAR_WIDTH;
+            }
+          } else if (_typeof(node) === 'object') {
+            if (node.fColor) fColor = node.fColor;
+            if (node.bColor) bColor = node.bColor;
+          }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
     }
   }]);
 
@@ -10738,6 +10902,10 @@ exports.Font = Font;
 var _font = __webpack_require__(/*! ./font */ "./src/font.js");
 
 var _point = __webpack_require__(/*! ./point */ "./src/point.js");
+
+var _world = __webpack_require__(/*! ./world */ "./src/world.js");
+
+var _player = __webpack_require__(/*! ./player */ "./src/player.js");
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -10809,11 +10977,61 @@ var getMaskedCanvas = function getMaskedCanvas(image, color) {
   return canvas;
 };
 
+var loop = function loop(state) {
+  // state updates
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = pressedKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var key = _step.value;
+      Object.assign(state, state.player.onInput(key)); // note: this will automatically do key repeat, as the keydown event will fire and reset pressedKeys
+      // each time the key repeat fires!
+
+      pressedKeys.delete(key);
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  var font = state.font,
+      world = state.world,
+      player = state.player; // drawing
+
+  world.draw(font, new _point.Point(0, 0)); // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+  // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+
+  font.drawText.apply(font, _toConsumableArray(_point.Point.fromGridToScreen(2, 2)).concat([_font.fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!')]));
+  player.draw(font);
+  requestAnimationFrame(loop.bind(null, {
+    font: font,
+    world: world,
+    player: player
+  }));
+};
+
+var pressedKeys = new Set();
+
 window.onload = function () {
   var canvas = document.querySelector('#game');
+  canvas.width = _point.CHAR_WIDTH * _point.SCENE_WIDTH;
+  canvas.height = _point.CHAR_HEIGHT * _point.SCENE_HEIGHT;
   var ctx = canvas.getContext('2d');
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  var player = new _player.Player();
   loadImage('images/curses_800x600.bmp').then(function (image) {
     var maskedCanvas = getMaskedCanvas(image, {
       r: 255,
@@ -10821,9 +11039,82 @@ window.onload = function () {
       b: 255
     });
     var font = new _font.Font(maskedCanvas, ctx);
-    font.drawChar.apply(font, _toConsumableArray(_point.Point.fromGridToScreen(2, 2)).concat(['dwarf']));
+    var world = new _world.World();
+    world.randomizeScene(new _point.Point(0, 0));
+    loop({
+      font: font,
+      world: world,
+      player: player
+    });
+  });
+  document.addEventListener('keydown', function (event) {
+    pressedKeys.add(event.key);
+    event.preventDefault();
+  });
+  document.addEventListener('keyup', function (event) {
+    pressedKeys.delete(event.key);
+    event.preventDefault();
   });
 };
+
+/***/ }),
+
+/***/ "./src/player.js":
+/*!***********************!*\
+  !*** ./src/player.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Player = void 0;
+
+var _point = __webpack_require__(/*! ./point */ "./src/point.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Player =
+/*#__PURE__*/
+function () {
+  function Player() {
+    var worldPos = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new _point.Point(10, 10);
+
+    _classCallCheck(this, Player);
+
+    this.graphic = '$(dwarf)';
+    this.worldPos = worldPos;
+  }
+
+  _createClass(Player, [{
+    key: "onInput",
+    value: function onInput(key) {
+      var posOffset = new _point.Point(0, 0);
+      if (key === 'h') posOffset = new _point.Point(-1, 0);else if (key === 'l') posOffset = new _point.Point(1, 0);else if (key === 'k') posOffset = new _point.Point(0, -1);else if (key === 'j') posOffset = new _point.Point(0, 1);else if (key === 'y') posOffset = new _point.Point(-1, -1);else if (key === 'u') posOffset = new _point.Point(1, -1);else if (key === 'b') posOffset = new _point.Point(-1, 1);else if (key === 'n') posOffset = new _point.Point(1, 1);
+      return {
+        player: new Player(this.worldPos.plus(posOffset))
+      };
+    }
+  }, {
+    key: "draw",
+    value: function draw(font) {
+      var screenPos = this.worldPos.toScreenSpace();
+      font.drawText(screenPos.x, screenPos.y, this.graphic);
+    }
+  }]);
+
+  return Player;
+}();
+
+exports.Player = Player;
 
 /***/ }),
 
@@ -10840,15 +11131,28 @@ window.onload = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Point = void 0;
-
-var _font = __webpack_require__(/*! ./font */ "./src/font.js");
+exports.Point = exports.SCENE_HEIGHT = exports.SCENE_WIDTH = exports.CHAR_WIDTH = exports.CHAR_HEIGHT = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var CHAR_HEIGHT = 12; // 20; // 12;
+
+exports.CHAR_HEIGHT = CHAR_HEIGHT;
+var CHAR_WIDTH = 10; // 20; // 8;
+// Definition: a _scene_ is a window of the world displayed on the screen.
+// Its coordinates are the character grid coordinates (e.g. each point is on the character grid)
+
+exports.CHAR_WIDTH = CHAR_WIDTH;
+var SCENE_WIDTH = 70; // 70 text cells wide
+
+exports.SCENE_WIDTH = SCENE_WIDTH;
+var SCENE_HEIGHT = 35; // 35 text cells high
+
+exports.SCENE_HEIGHT = SCENE_HEIGHT;
 
 var Point =
 /*#__PURE__*/
@@ -10861,9 +11165,14 @@ function () {
   }
 
   _createClass(Point, [{
+    key: "plus",
+    value: function plus(other) {
+      return new Point(this.x + other.x, this.y + other.y);
+    }
+  }, {
     key: "toScreenSpace",
     value: function toScreenSpace() {
-      return new Point(this.x * _font.CHAR_WIDTH, this.y * _font.CHAR_HEIGHT);
+      return new Point(this.x % SCENE_WIDTH * CHAR_WIDTH, this.y % SCENE_HEIGHT * CHAR_HEIGHT);
     }
   }, {
     key: Symbol.iterator,
@@ -10899,6 +11208,102 @@ function () {
 }();
 
 exports.Point = Point;
+
+/***/ }),
+
+/***/ "./src/world.js":
+/*!**********************!*\
+  !*** ./src/world.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.World = void 0;
+
+var _point = __webpack_require__(/*! ./point */ "./src/point.js");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// Definition: a _scene_ is a window of the world displayed on the screen.
+// Its coordinates are the character grid coordinates (e.g. each point is on the character grid)
+var scenePoints = [];
+
+for (var x = 0; x < _point.SCENE_WIDTH; ++x) {
+  for (var y = 0; y < _point.SCENE_HEIGHT; ++y) {
+    scenePoints.push(new _point.Point(x, y));
+  }
+}
+
+var World =
+/*#__PURE__*/
+function () {
+  function World() {
+    _classCallCheck(this, World);
+
+    this.floorTiles = new Map();
+  }
+
+  _createClass(World, [{
+    key: "draw",
+    value: function draw(font) {
+      var _this = this;
+
+      var cameraPos = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _point.Point(0, 0);
+      scenePoints.forEach(function (point) {
+        var tile = _this.floorTiles.get(JSON.stringify(cameraPos.plus(point)));
+
+        if (tile == null) {
+          var p = cameraPos.plus(point);
+          throw new Error("Error: tile not generated at point ".concat(p.x, ", ").concat(p.y));
+        }
+
+        font.drawChar.apply(font, _toConsumableArray(point.toScreenSpace()).concat([tile, 'grey']));
+      }, this);
+    }
+    /**
+     * Generate new random world
+     * @param scenePos coordinate of scene in the world, e.g. scenePos == {x: 1, y: 2} is the second scene to the right,
+     * third scene down
+     */
+
+  }, {
+    key: "randomizeScene",
+    value: function randomizeScene(scenePos) {
+      var _this2 = this;
+
+      var worldPos = new _point.Point(scenePos.x * _point.SCENE_WIDTH, scenePos.y * _point.SCENE_HEIGHT);
+      scenePoints.forEach(function (point) {
+        var char;
+        var r = Math.floor(Math.random() * 4);
+        if (r === 0) char = '`';else if (r === 1) char = '\'';else if (r === 2) char = '.';else if (r === 3) char = ',';
+
+        _this2.floorTiles.set(JSON.stringify(point.plus(worldPos)), char);
+      }, this);
+    }
+  }]);
+
+  return World;
+}();
+
+exports.World = World;
 
 /***/ }),
 
