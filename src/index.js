@@ -59,12 +59,12 @@ const loop = state => {
   if (state.drawTainted) {
     state.drawTainted = false;
 
-    world.draw(font, new Point(0, 0));
+    world.draw(font, state);
 
     // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
     // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
-    font.drawText(...Point.fromGridToScreen(2, 2),
-      fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+    // font.drawText(...Point.fromGridToScreen(2, 2),
+    //   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
     player.draw(font);
   }
@@ -82,7 +82,7 @@ window.onload = () => {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const player = new Player();
+  const player = new Player(new Point(SCENE_WIDTH * (100 + 0.5), SCENE_HEIGHT * (100 + 0.5)));
 
   loadImage('images/curses_800x600.bmp')
     .then(image => {
@@ -90,7 +90,7 @@ window.onload = () => {
 
       let font = new Font(maskedCanvas, ctx);
       let world = new World();
-      world.randomizeScene(new Point(0, 0));
+      world.randomizeScene(new Point(100, 100));
       loop({font, world, player, drawTainted: true});
     });
 

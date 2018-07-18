@@ -16,12 +16,21 @@ export class World {
     this.floorTiles = new Map();
   }
 
-  draw(font, cameraPos = new Point(0, 0)) {
+  draw(font, state) {
+    let player = state.player;
+    let cameraPos = new Point(
+      player.worldPos.x - (player.worldPos.x % SCENE_WIDTH),
+      player.worldPos.y - (player.worldPos.y % SCENE_HEIGHT)
+    );
+
     scenePoints.forEach(point => {
       let tile = this.floorTiles.get(JSON.stringify(cameraPos.plus(point)));
       if (tile == null) {
         let p = cameraPos.plus(point);
-        throw new Error(`Error: tile not generated at point ${p.x}, ${p.y}`);
+        let scenePoint = new Point(Math.floor(p.x / SCENE_WIDTH), Math.floor(p.y / SCENE_HEIGHT));
+        // generate next scene
+        this.randomizeScene(scenePoint);
+        tile = this.floorTiles.get(JSON.stringify(cameraPos.plus(point)));
       }
 
       font.drawChar(...point.toScreenSpace(), tile, 'grey');

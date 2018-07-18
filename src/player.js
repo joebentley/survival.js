@@ -1,7 +1,7 @@
 import {Point} from './point';
 
 export class Player {
-  constructor(worldPos = new Point(10, 10)) {
+  constructor(worldPos) {
     this.graphic = '$(dwarf)';
     this.worldPos = worldPos;
   }
