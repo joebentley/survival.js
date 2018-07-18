@@ -18,7 +18,10 @@ export class Player {
     else if (key === 'b') posOffset = new Point(-1, 1);
     else if (key === 'n') posOffset = new Point(1, 1);
 
-    return {player: new Player(this.worldPos.plus(posOffset))};
+    return {
+      player: new Player(this.worldPos.plus(posOffset)),
+      drawTainted: !(posOffset.equals(Point.zero))
+    };
   }
 
   draw(font) {

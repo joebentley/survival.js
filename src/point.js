@@ -18,6 +18,10 @@ export class Point {
     return new Point(this.x + other.x, this.y + other.y);
   }
 
+  equals(other) {
+    return this.x === other.x && this.y === other.y;
+  }
+
   toScreenSpace() {
     return new Point((this.x % SCENE_WIDTH) * CHAR_WIDTH, (this.y % SCENE_HEIGHT) * CHAR_HEIGHT);
   }
@@ -31,3 +35,5 @@ export class Point {
     yield this.y;
   }
 }
+
+Point.zero = new Point(0, 0);

@@ -54,18 +54,22 @@ const loop = state => {
 
   let {font, world, player} = state;
 
-  // drawing
+  // drawing, only draw if state has been tainted
 
-  world.draw(font, new Point(0, 0));
+  if (state.drawTainted) {
+    state.drawTainted = false;
 
-  // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
-  // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
-  font.drawText(...Point.fromGridToScreen(2, 2),
-    fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+    world.draw(font, new Point(0, 0));
 
-  player.draw(font);
+    // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+    // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+    font.drawText(...Point.fromGridToScreen(2, 2),
+      fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
-  requestAnimationFrame(loop.bind(null, {font, world, player}));
+    player.draw(font);
+  }
+
+  requestAnimationFrame(loop.bind(null, state));
 };
 
 let pressedKeys = new Set();
@@ -87,7 +91,7 @@ window.onload = () => {
       let font = new Font(maskedCanvas, ctx);
       let world = new World();
       world.randomizeScene(new Point(0, 0));
-      loop({font, world, player});
+      loop({font, world, player, drawTainted: true});
     });
 
   document.addEventListener('keydown', (event) => {
