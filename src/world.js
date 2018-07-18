@@ -1,10 +1,7 @@
-import {Point} from './point';
+import {Point, SCENE_WIDTH, SCENE_HEIGHT} from './point';
 
 // Definition: a _scene_ is a window of the world displayed on the screen.
 // Its coordinates are the character grid coordinates (e.g. each point is on the character grid)
-
-export const SCENE_WIDTH = 70; // 70 text cells wide
-export const SCENE_HEIGHT = 35; // 35 text cells high
 
 let scenePoints = [];
 

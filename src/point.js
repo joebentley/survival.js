@@ -1,4 +1,12 @@
-import {CHAR_WIDTH, CHAR_HEIGHT} from './font';
+
+export const CHAR_HEIGHT = 12; // 20; // 12;
+export const CHAR_WIDTH = 10; // 20; // 8;
+
+// Definition: a _scene_ is a window of the world displayed on the screen.
+// Its coordinates are the character grid coordinates (e.g. each point is on the character grid)
+
+export const SCENE_WIDTH = 70; // 70 text cells wide
+export const SCENE_HEIGHT = 35; // 35 text cells high
 
 export class Point {
   constructor(x, y) {
@@ -11,7 +19,7 @@ export class Point {
   }
 
   toScreenSpace() {
-    return new Point(this.x * CHAR_WIDTH, this.y * CHAR_HEIGHT);
+    return new Point((this.x % SCENE_WIDTH) * CHAR_WIDTH, (this.y % SCENE_HEIGHT) * CHAR_HEIGHT);
   }
 
   static fromGridToScreen(x, y) {

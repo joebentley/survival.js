@@ -1,7 +1,5 @@
-import {Point} from './point';
+import {CHAR_WIDTH, CHAR_HEIGHT} from './point';
 
-export const CHAR_HEIGHT = 12; // 20; // 12;
-export const CHAR_WIDTH = 10; // 20; // 8;
 export const NUM_PER_ROW = 16;
 
 const CHARS = 'space dwarf dwarf2 heart diamond club spade circle emptycircle ring emptyring male female note1 note2 gem '

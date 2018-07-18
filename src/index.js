@@ -1,7 +1,8 @@
 
-import {CHAR_WIDTH, CHAR_HEIGHT, Font, fontText} from './font';
-import {Point} from './point';
-import {SCENE_HEIGHT, SCENE_WIDTH, World} from './world';
+import {Font, fontText} from './font';
+import {CHAR_WIDTH, CHAR_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT, Point} from './point';
+import {World} from './world';
+import {Player} from './player';
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -41,7 +42,20 @@ const getMaskedCanvas = (image, color) => {
   return canvas;
 };
 
-const loop = ({font, world}) => {
+const loop = state => {
+  // state updates
+
+  for (let key of pressedKeys) {
+    Object.assign(state, state.player.onInput(key));
+    // note: this will automatically do key repeat, as the keydown event will fire and reset pressedKeys
+    // each time the key repeat fires!
+    pressedKeys.delete(key);
+  }
+
+  let {font, world, player} = state;
+
+  // drawing
+
   world.draw(font, new Point(0, 0));
 
   // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
@@ -49,8 +63,12 @@ const loop = ({font, world}) => {
   font.drawText(...Point.fromGridToScreen(2, 2),
     fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
-  requestAnimationFrame(loop.bind(null, {font, world}));
+  player.draw(font);
+
+  requestAnimationFrame(loop.bind(null, {font, world, player}));
 };
+
+let pressedKeys = new Set();
 
 window.onload = () => {
   let canvas = document.querySelector('#game');
@@ -60,6 +78,8 @@ window.onload = () => {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  const player = new Player();
+
   loadImage('images/curses_800x600.bmp')
     .then(image => {
       let maskedCanvas = getMaskedCanvas(image, {r: 255, g: 0, b: 255});
@@ -67,6 +87,16 @@ window.onload = () => {
       let font = new Font(maskedCanvas, ctx);
       let world = new World();
       world.randomizeScene(new Point(0, 0));
-      loop({font, world});
+      loop({font, world, player});
     });
+
+  document.addEventListener('keydown', (event) => {
+    pressedKeys.add(event.key);
+    event.preventDefault();
+  });
+
+  document.addEventListener('keyup', (event) => {
+    pressedKeys.delete(event.key);
+    event.preventDefault();
+  });
 };
