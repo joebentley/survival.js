@@ -22,6 +22,10 @@ export class Point {
     return this.x === other.x && this.y === other.y;
   }
 
+  round() {
+    return new Point(Math.round(this.x), Math.round(this.y));
+  }
+
   toScreenSpace() {
     return new Point((this.x % SCENE_WIDTH) * CHAR_WIDTH, (this.y % SCENE_HEIGHT) * CHAR_HEIGHT);
   }

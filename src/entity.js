@@ -3,7 +3,7 @@ import {Point, SCENE_HEIGHT, SCENE_WIDTH} from './point';
 
 export class Entity {
   constructor(worldPos, graphic) {
-    this.worldPos = worldPos;
+    this.worldPos = worldPos.round();
     this.graphic = graphic;
     this.behaviours = [];
   }
@@ -19,6 +19,7 @@ export class Entity {
   }
 
   draw(font, state) {
+    // TODO: Cache which entities are on screen?
     if (!state || this.isOnScreen(state.player.worldPos)) {
       let screenPos = this.worldPos.toScreenSpace();
       font.drawText(screenPos.x, screenPos.y, this.graphic);
