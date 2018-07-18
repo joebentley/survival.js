@@ -1,5 +1,5 @@
 import {fontText} from './font';
-import {Point} from './point';
+import {Point, SCENE_HEIGHT, SCENE_WIDTH} from './point';
 
 export class Entity {
   constructor(worldPos, graphic) {
@@ -8,9 +8,21 @@ export class Entity {
     this.behaviours = [];
   }
 
-  draw(font) {
-    let screenPos = this.worldPos.toScreenSpace();
-    font.drawText(screenPos.x, screenPos.y, this.graphic);
+  isOnScreen(playerWorldPos) {
+    let scenePos = new Point(
+      Math.floor(playerWorldPos.x / SCENE_WIDTH),
+      Math.floor(playerWorldPos.y / SCENE_HEIGHT));
+
+    return this.worldPos.x > scenePos.x * SCENE_WIDTH && this.worldPos.y > scenePos.y * SCENE_HEIGHT
+      && this.worldPos.x <= (scenePos.x + 1) * SCENE_WIDTH && this.worldPos.y <= (scenePos.y + 1) * SCENE_HEIGHT;
+
+  }
+
+  draw(font, state) {
+    if (!state || this.isOnScreen(state.player.worldPos)) {
+      let screenPos = this.worldPos.toScreenSpace();
+      font.drawText(screenPos.x, screenPos.y, this.graphic);
+    }
   }
 
   update(state) {
@@ -34,7 +46,6 @@ export class Cat extends Entity {
         let cat = new Cat(this.worldPos.plus(posOffset));
         let entities = state.entities.slice().filter(entity => entity !== this, this);
         entities.push(cat);
-
         return {drawTainted: true, entities};
       }
     });

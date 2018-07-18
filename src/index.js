@@ -75,7 +75,7 @@ const loop = state => {
     //   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
     for (let entity of entities) {
-      entity.draw(font);
+      entity.draw(font, state);
     }
 
     player.draw(font);
