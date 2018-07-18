@@ -60,28 +60,46 @@ export class Font {
     if (this.characterCache == null)
       this.generateCharacterCache();
 
-    let rect = {...this.characterCache.get(char), w: CHAR_WIDTH, h: CHAR_HEIGHT};
+    if (char === ' ') char = 'space';
+
+    let charSheetCoord = this.characterCache.get(char);
+
+    if (charSheetCoord == null)
+      throw new Error(`Invalid character ${char}`);
+
+    let rect = {x: charSheetCoord.x, y: charSheetCoord.y, w: CHAR_WIDTH, h: CHAR_HEIGHT};
+    let charObject = {char, fColor, bColor};
 
     // draw background color of character
     this.ctx.fillStyle = bColor;
     this.ctx.fillRect(x, y, rect.w, rect.h);
 
-    // temporary canvas for tinting each character
-    let tempCanvas = document.createElement('canvas');
-    tempCanvas.width = rect.w;
-    tempCanvas.height = rect.h;
-    let tempCtx = tempCanvas.getContext('2d');
+    if (this._canvasCache == null)
+      this._canvasCache = new Map();
 
-    // draw the font character first
-    tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
-    // only keep pixels that overlay the pixels of the character
-    tempCtx.globalCompositeOperation = 'source-in';
-    tempCtx.fillStyle = fColor;
-    // draw colored rectangle over the character, only pixels overlapping the character are kept
-    tempCtx.fillRect(0, 0, rect.w, rect.h);
+    if (!this._canvasCache.has(JSON.stringify(charObject))) {
+      // temporary canvas for tinting each character
+      let tempCanvas = document.createElement('canvas');
+      tempCanvas.width = rect.w;
+      tempCanvas.height = rect.h;
+      let tempCtx = tempCanvas.getContext('2d');
+
+      tempCtx.globalCompositeOperation = 'source-over';
+      tempCtx.clearRect(0, 0, rect.w, rect.h);
+
+      // draw the font character first
+      tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+      // only keep pixels that overlay the pixels of the character
+      tempCtx.globalCompositeOperation = 'source-in';
+      tempCtx.fillStyle = fColor;
+      // draw colored rectangle over the character, only pixels overlapping the character are kept
+      tempCtx.fillRect(0, 0, rect.w, rect.h);
+
+      this._canvasCache.set(JSON.stringify(charObject), tempCanvas);
+    }
 
     // draw tinted character onto main canvas
-    this.ctx.drawImage(tempCanvas, x, y);
+    this.ctx.drawImage(this._canvasCache.get(JSON.stringify(charObject)), x, y);
   }
 
   drawText(x, y, text) {

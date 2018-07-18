@@ -6,6 +6,10 @@ export class Point {
     this.y = y;
   }
 
+  plus(other) {
+    return new Point(this.x + other.x, this.y + other.y);
+  }
+
   toScreenSpace() {
     return new Point(this.x * CHAR_WIDTH, this.y * CHAR_HEIGHT);
   }

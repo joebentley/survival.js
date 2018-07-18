@@ -1,6 +1,7 @@
 
-import {Font, fontText} from './font';
+import {CHAR_WIDTH, CHAR_HEIGHT, Font, fontText} from './font';
 import {Point} from './point';
+import {SCENE_HEIGHT, SCENE_WIDTH, World} from './world';
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -40,8 +41,21 @@ const getMaskedCanvas = (image, color) => {
   return canvas;
 };
 
+const loop = ({font, world}) => {
+  world.draw(font, new Point(0, 0));
+
+  // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+  // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+  font.drawText(...Point.fromGridToScreen(2, 2),
+    fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+
+  requestAnimationFrame(loop.bind(null, {font, world}));
+};
+
 window.onload = () => {
   let canvas = document.querySelector('#game');
+  canvas.width = CHAR_WIDTH * SCENE_WIDTH;
+  canvas.height = CHAR_HEIGHT * SCENE_HEIGHT;
   let ctx = canvas.getContext('2d');
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -51,9 +65,8 @@ window.onload = () => {
       let maskedCanvas = getMaskedCanvas(image, {r: 255, g: 0, b: 255});
 
       let font = new Font(maskedCanvas, ctx);
-      // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
-      // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
-      font.drawText(...Point.fromGridToScreen(2, 2),
-        fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+      let world = new World();
+      world.randomizeScene(new Point(0, 0));
+      loop({font, world});
     });
 };
