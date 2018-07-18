@@ -7,7 +7,7 @@ export class Player {
   }
 
   onInput(key) {
-    let posOffset;
+    let posOffset = new Point(0, 0);
 
     if (key === 'h') posOffset = new Point(-1, 0);
     else if (key === 'l') posOffset = new Point(1, 0);

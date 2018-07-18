@@ -13,7 +13,8 @@
     "webpack-serve": "^2.0.2"
   },
   "scripts": {
-    "serve": "webpack-serve"
+    "serve": "webpack-serve",
+    "gh-pages": "cp -r public/* docs && cp dist/bundle.js docs"
   },
   "serve": {
     "content": "public"
