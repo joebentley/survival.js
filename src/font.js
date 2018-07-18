@@ -34,18 +34,29 @@ export class Font {
     }
   }
 
-  drawChar(x, y, char) {
+  drawChar(x, y, char, fColor = 'white', bColor = 'black') {
     if (this.characterCache == null)
       this.generateCharacterCache();
 
     let rect = {...this.characterCache.get(char), w: CHAR_WIDTH, h: CHAR_HEIGHT};
 
-    this.ctx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, x, y, rect.w, rect.h);
+    this.ctx.fillStyle = bColor;
+    this.ctx.fillRect(x, y, rect.w, rect.h);
+
+    let canvas = document.createElement('canvas');
+    canvas.width = rect.w;
+    canvas.height = rect.h;
+    let tempCtx = canvas.getContext('2d');
+
+    tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+    tempCtx.globalCompositeOperation = 'source-in';
+    tempCtx.fillStyle = fColor;
+    tempCtx.fillRect(0, 0, rect.w, rect.h);
+
+    this.ctx.drawImage(canvas, x, y);
   }
 
   drawText(x, y, text) {
-    let currX = x;
-
     while (text.length > 0) {
       let match = text.match(/^\$\(([\w\d]+)\)/);
       if (match != null) {
