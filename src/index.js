@@ -66,8 +66,9 @@ const loop = (state, time) => {
 
   let {font, world, player, entities, ctx, canvas} = state;
 
-  // drawing, only draw if state has been tainted
+  // drawing
 
+  // only draw if state has been draw-tainted
   if (state.drawTainted) {
     state.drawTainted = false;
 
