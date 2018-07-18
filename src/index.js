@@ -1,5 +1,6 @@
 
-import {Font} from './font.js';
+import {Font} from './font';
+import {Point} from './point';
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -50,6 +51,6 @@ window.onload = () => {
       let maskedCanvas = getMaskedCanvas(image, {r: 255, g: 0, b: 255});
 
       let font = new Font(maskedCanvas, ctx);
-      font.drawChar(200, 200, 'dwarf');
+      font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
     });
 };

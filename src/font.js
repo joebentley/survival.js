@@ -1,6 +1,6 @@
-const CHAR_HEIGHT = 12; // 20; // 12;
-const CHAR_WIDTH = 10; // 20; // 8;
-const NUM_PER_ROW = 16;
+export const CHAR_HEIGHT = 12; // 20; // 12;
+export const CHAR_WIDTH = 10; // 20; // 8;
+export const NUM_PER_ROW = 16;
 
 const CHARS = 'space dwarf dwarf2 heart diamond club spade circle emptycircle ring emptyring male female note1 note2 gem '
 + 'sloperight slopeleft updown alert pagemark sectionmark thickbottom updown2 up down right left boxbottomleft leftright slopeup slopedown '
