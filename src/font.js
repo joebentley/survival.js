@@ -40,6 +40,8 @@ export class FontText {
 
 export const fontText = new FontText();
 
+export class UnknownCharacterError extends Error {}
+
 export class Font {
   constructor(fontImage, canvasContext) {
     this.fontImage = fontImage;
@@ -65,7 +67,7 @@ export class Font {
     let charSheetCoord = this.characterCache.get(char);
 
     if (charSheetCoord == null)
-      throw new Error(`Invalid character ${char}`);
+      throw new UnknownCharacterError(`Invalid character ${char}`);
 
     let rect = {x: charSheetCoord.x, y: charSheetCoord.y, w: CHAR_WIDTH, h: CHAR_HEIGHT};
     let charObject = {char, fColor, bColor};
