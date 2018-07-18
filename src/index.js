@@ -4,6 +4,7 @@ import {CHAR_WIDTH, CHAR_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT, Point} from './point
 import {World} from './world';
 import {Player} from './player';
 import {Cat} from './entity';
+import {makeWaitTickMessage} from './ui';
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -43,7 +44,9 @@ const getMaskedCanvas = (image, color) => {
   return canvas;
 };
 
-const loop = state => {
+const loop = (state, time) => {
+  state.timeSinceLastDraw = (time - state.timeSinceLastDraw) || 0;
+
   // state updates
 
   for (let key of pressedKeys) {
@@ -82,9 +85,11 @@ const loop = state => {
     }
 
     player.draw(font);
+
+    state.ui.waitTickMessage.draw(font, state);
   }
 
-  requestAnimationFrame(loop.bind(null, state));
+  requestAnimationFrame(time => loop(state, time));
 };
 
 let pressedKeys = new Set();
@@ -105,7 +110,16 @@ window.onload = () => {
 
       let entities = [new Cat(player.worldPos.plus(new Point(10, 10)))];
 
-      loop({font, world: new World(), player, entities, drawTainted: true, canvas, ctx});
+      loop({
+        font,
+        world: new World(),
+        player,
+        entities,
+        drawTainted: true,
+        canvas,
+        ctx,
+        ui: {waitTickMessage: makeWaitTickMessage()}
+      });
     });
 
   document.addEventListener('keydown', (event) => {
