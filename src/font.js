@@ -42,4 +42,20 @@ export class Font {
 
     this.ctx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, x, y, rect.w, rect.h);
   }
+
+  drawText(x, y, text) {
+    let currX = x;
+
+    while (text.length > 0) {
+      let match = text.match(/^\$\(([\w\d]+)\)/);
+      if (match != null) {
+        text = text.slice(match[0].length);
+        this.drawChar(x, y, match[1]);
+      } else {
+        this.drawChar(x, y, text[0]);
+        text = text.slice(1);
+      }
+      x += CHAR_WIDTH;
+    }
+  }
 }

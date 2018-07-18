@@ -51,6 +51,7 @@ window.onload = () => {
       let maskedCanvas = getMaskedCanvas(image, {r: 255, g: 0, b: 255});
 
       let font = new Font(maskedCanvas, ctx);
-      font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+      // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
+      font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
     });
 };
