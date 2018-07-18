@@ -40,20 +40,26 @@ export class Font {
 
     let rect = {...this.characterCache.get(char), w: CHAR_WIDTH, h: CHAR_HEIGHT};
 
+    // draw background color of character
     this.ctx.fillStyle = bColor;
     this.ctx.fillRect(x, y, rect.w, rect.h);
 
-    let canvas = document.createElement('canvas');
-    canvas.width = rect.w;
-    canvas.height = rect.h;
-    let tempCtx = canvas.getContext('2d');
+    // temporary canvas for tinting each character
+    let tempCanvas = document.createElement('canvas');
+    tempCanvas.width = rect.w;
+    tempCanvas.height = rect.h;
+    let tempCtx = tempCanvas.getContext('2d');
 
+    // draw the font character first
     tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+    // only keep pixels that overlay the pixels of the character
     tempCtx.globalCompositeOperation = 'source-in';
     tempCtx.fillStyle = fColor;
+    // draw colored rectangle over the character, only pixels overlapping the character are kept
     tempCtx.fillRect(0, 0, rect.w, rect.h);
 
-    this.ctx.drawImage(canvas, x, y);
+    // draw tinted character onto main canvas
+    this.ctx.drawImage(tempCanvas, x, y);
   }
 
   drawText(x, y, text) {
