@@ -53,8 +53,11 @@ const loop = state => {
     pressedKeys.delete(key);
   }
 
-  for (let entity of state.entities) {
-    Object.assign(state, entity.update(state));
+  if (state.updateEntities) {
+    for (let entity of state.entities) {
+      Object.assign(state, entity.update(state));
+    }
+    state.updateEntities = false;
   }
 
   let {font, world, player, entities, ctx, canvas} = state;

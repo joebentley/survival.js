@@ -20,7 +20,8 @@ export class Player extends Entity {
 
     return {
       player: new Player(this.worldPos.plus(posOffset)),
-      drawTainted: !(posOffset.equals(Point.zero))
+      drawTainted: !(posOffset.equals(Point.zero)),
+      updateEntities: !(posOffset.equals(Point.zero)) || key === '.'
     };
   }
 }

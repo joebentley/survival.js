@@ -14,7 +14,7 @@ export class Entity {
       Math.floor(playerWorldPos.y / SCENE_HEIGHT));
 
     return this.worldPos.x > scenePos.x * SCENE_WIDTH && this.worldPos.y > scenePos.y * SCENE_HEIGHT
-      && this.worldPos.x <= (scenePos.x + 1) * SCENE_WIDTH && this.worldPos.y <= (scenePos.y + 1) * SCENE_HEIGHT;
+      && this.worldPos.x < (scenePos.x + 1) * SCENE_WIDTH && this.worldPos.y < (scenePos.y + 1) * SCENE_HEIGHT;
 
   }
 
@@ -38,17 +38,19 @@ export class Cat extends Entity {
   constructor(worldPos) {
     super(worldPos, fontText.fColor('yellow').text('c'));
 
-    this.behaviours.push(state => {
-      let posOffset = new Point(
-        Math.random() < 0.01 ? (Math.random() < 0.5 ? 1 : -1) : 0,
-        Math.random() < 0.01 ? (Math.random() < 0.5 ? 1 : -1) : 0);
+    this.behaviours.push(wanderingBehaviour.bind(this));
+  }
+}
 
-      if (!posOffset.equals(Point.zero)) {
-        let cat = new Cat(this.worldPos.plus(posOffset));
-        let entities = state.entities.slice().filter(entity => entity !== this, this);
-        entities.push(cat);
-        return {drawTainted: true, entities};
-      }
-    });
+export function wanderingBehaviour(state) {
+  let posOffset = new Point(
+    Math.random() < 0.2 ? (Math.random() < 0.5 ? 1 : -1) : 0,
+    Math.random() < 0.2 ? (Math.random() < 0.5 ? 1 : -1) : 0);
+
+  if (!posOffset.equals(Point.zero)) {
+    let entity = new this.constructor(this.worldPos.plus(posOffset));
+    let entities = state.entities.slice().filter(entity => entity !== this, this);
+    entities.push(entity);
+    return {drawTainted: true, entities};
   }
 }
