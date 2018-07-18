@@ -3,6 +3,7 @@ import {Font, fontText} from './font';
 import {CHAR_WIDTH, CHAR_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT, Point} from './point';
 import {World} from './world';
 import {Player} from './player';
+import {Cat} from './entity';
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -52,7 +53,11 @@ const loop = state => {
     pressedKeys.delete(key);
   }
 
-  let {font, world, player, ctx, canvas} = state;
+  for (let entity of state.entities) {
+    Object.assign(state, entity.update(state));
+  }
+
+  let {font, world, player, entities, ctx, canvas} = state;
 
   // drawing, only draw if state has been tainted
 
@@ -68,6 +73,10 @@ const loop = state => {
     // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
     // font.drawText(...Point.fromGridToScreen(2, 2),
     //   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+
+    for (let entity of entities) {
+      entity.draw(font);
+    }
 
     player.draw(font);
   }
@@ -90,9 +99,10 @@ window.onload = () => {
       let maskedCanvas = getMaskedCanvas(image, {r: 255, g: 0, b: 255});
 
       let font = new Font(maskedCanvas, ctx);
-      let world = new World();
-      world.randomizeScene(new Point(100, 100));
-      loop({font, world, player, drawTainted: true, canvas, ctx});
+
+      let entities = [new Cat(player.worldPos.plus(new Point(10, 10)))];
+
+      loop({font, world: new World(), player, entities, drawTainted: true, canvas, ctx});
     });
 
   document.addEventListener('keydown', (event) => {

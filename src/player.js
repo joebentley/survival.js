@@ -1,9 +1,9 @@
 import {Point} from './point';
+import {Entity} from './entity';
 
-export class Player {
+export class Player extends Entity {
   constructor(worldPos) {
-    this.graphic = '$(dwarf)';
-    this.worldPos = worldPos;
+    super(worldPos, '$(dwarf)');
   }
 
   onInput(key) {
@@ -22,10 +22,5 @@ export class Player {
       player: new Player(this.worldPos.plus(posOffset)),
       drawTainted: !(posOffset.equals(Point.zero))
     };
-  }
-
-  draw(font) {
-    let screenPos = this.worldPos.toScreenSpace();
-    font.drawText(screenPos.x, screenPos.y, this.graphic);
   }
 }
