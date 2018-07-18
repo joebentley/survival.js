@@ -1,4 +1,4 @@
-import {CHAR_WIDTH, CHAR_HEIGHT} from './point';
+import {CHAR_WIDTH, CHAR_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT} from './point';
 
 export const NUM_PER_ROW = 16;
 
@@ -56,7 +56,7 @@ export class Font {
     }
   }
 
-  drawChar(x, y, char, fColor = 'white', bColor = 'black') {
+  drawChar(x, y, char, fColor = 'none', bColor = 'transparent') {
     if (this.characterCache == null)
       this.generateCharacterCache();
 
@@ -70,9 +70,11 @@ export class Font {
     let rect = {x: charSheetCoord.x, y: charSheetCoord.y, w: CHAR_WIDTH, h: CHAR_HEIGHT};
     let charObject = {char, fColor, bColor};
 
-    // draw background color of character
-    this.ctx.fillStyle = bColor;
-    this.ctx.fillRect(x, y, rect.w, rect.h);
+    if (bColor !== 'none') {
+      // draw background color of character
+      this.ctx.fillStyle = bColor;
+      this.ctx.fillRect(x, y, rect.w, rect.h);
+    }
 
     if (this._canvasCache == null)
       this._canvasCache = new Map();
@@ -89,11 +91,15 @@ export class Font {
 
       // draw the font character first
       tempCtx.drawImage(this.fontImage, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
-      // only keep pixels that overlay the pixels of the character
-      tempCtx.globalCompositeOperation = 'source-in';
-      tempCtx.fillStyle = fColor;
-      // draw colored rectangle over the character, only pixels overlapping the character are kept
-      tempCtx.fillRect(0, 0, rect.w, rect.h);
+
+      // don't tint if fColor === 'none'
+      if (fColor !== 'none') {
+        // only keep pixels that overlay the pixels of the character
+        tempCtx.globalCompositeOperation = 'source-in';
+        tempCtx.fillStyle = fColor;
+        // draw colored rectangle over the character, only pixels overlapping the character are kept
+        tempCtx.fillRect(0, 0, rect.w, rect.h);
+      }
 
       this._canvasCache.set(JSON.stringify(charObject), tempCanvas);
     }

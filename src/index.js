@@ -52,12 +52,15 @@ const loop = state => {
     pressedKeys.delete(key);
   }
 
-  let {font, world, player} = state;
+  let {font, world, player, ctx, canvas} = state;
 
   // drawing, only draw if state has been tainted
 
   if (state.drawTainted) {
     state.drawTainted = false;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     world.draw(font, state);
 
@@ -79,8 +82,6 @@ window.onload = () => {
   canvas.width = CHAR_WIDTH * SCENE_WIDTH;
   canvas.height = CHAR_HEIGHT * SCENE_HEIGHT;
   let ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const player = new Player(new Point(SCENE_WIDTH * (100 + 0.5), SCENE_HEIGHT * (100 + 0.5)));
 
@@ -91,7 +92,7 @@ window.onload = () => {
       let font = new Font(maskedCanvas, ctx);
       let world = new World();
       world.randomizeScene(new Point(100, 100));
-      loop({font, world, player, drawTainted: true});
+      loop({font, world, player, drawTainted: true, canvas, ctx});
     });
 
   document.addEventListener('keydown', (event) => {
