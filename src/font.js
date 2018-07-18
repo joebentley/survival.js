@@ -1,3 +1,5 @@
+import {Point} from './point';
+
 export const CHAR_HEIGHT = 12; // 20; // 12;
 export const CHAR_WIDTH = 10; // 20; // 8;
 export const NUM_PER_ROW = 16;
@@ -17,6 +19,26 @@ const CHARS = 'space dwarf dwarf2 heart diamond club spade circle emptycircle ri
 + 'alpha beta Gamma Pi Sigma sigma mu tau Phi theta Omega delta inf ninf in intersect '
 + 'equiv pm gteq lteq upperint lowerint div approx degree cdot hyphen sqrt endquote power2 block space3';
 
+
+/**
+ * Example:
+ *
+ * font.drawText(
+ *   ...Point.fromGridToScreen(2, 2),
+ *   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
+ */
+export class FontText {
+  constructor(nodes) {
+    this.nodes = nodes || [];
+  }
+
+  text(text) { return new FontText(this.nodes.concat(text)); }
+  fColor(color) { return new FontText(this.nodes.concat({fColor: color})); }
+  bColor(color) { return new FontText(this.nodes.concat({bColor: color})); }
+  reset() { return new FontText(this.nodes.concat({fColor: 'white'}, {bColor: 'black'})); }
+}
+
+export const fontText = new FontText();
 
 export class Font {
   constructor(fontImage, canvasContext) {
@@ -63,16 +85,29 @@ export class Font {
   }
 
   drawText(x, y, text) {
-    while (text.length > 0) {
-      let match = text.match(/^\$\(([\w\d]+)\)/);
-      if (match != null) {
-        text = text.slice(match[0].length);
-        this.drawChar(x, y, match[1]);
-      } else {
-        this.drawChar(x, y, text[0]);
-        text = text.slice(1);
+    if (typeof text === 'string') {
+      text = fontText.text(text);
+    }
+
+    let fColor, bColor;
+
+    for (let node of text.nodes) {
+      if (typeof node === 'string') {
+        while (node.length > 0) {
+          let match = node.match(/^\$\(([\w\d]+)\)/);
+          if (match != null) {
+            node = node.slice(match[0].length);
+            this.drawChar(x, y, match[1], fColor, bColor);
+          } else {
+            this.drawChar(x, y, node[0], fColor, bColor);
+            node = node.slice(1);
+          }
+          x += CHAR_WIDTH;
+        }
+      } else if (typeof node === 'object') {
+        if (node.fColor) fColor = node.fColor;
+        if (node.bColor) bColor = node.bColor;
       }
-      x += CHAR_WIDTH;
     }
   }
 }

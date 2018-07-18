@@ -1,5 +1,5 @@
 
-import {Font} from './font';
+import {Font, fontText} from './font';
 import {Point} from './point';
 
 function loadImage(path) {
@@ -52,6 +52,8 @@ window.onload = () => {
 
       let font = new Font(maskedCanvas, ctx);
       // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
-      font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+      // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
+      font.drawText(...Point.fromGridToScreen(2, 2),
+        fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
     });
 };
