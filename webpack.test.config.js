@@ -1,3 +1,7 @@
+/**
+ * Webpack config for running test suite
+ */
+
 const path = require('path');
 
 module.exports = {
@@ -16,7 +20,7 @@ module.exports = {
     ]
   },
   devtool: 'source-map',
-  node: { // https://github.com/webpack-contrib/css-loader/issues/447
+  node: { // prevent require 'fs' module error https://github.com/webpack-contrib/css-loader/issues/447
     fs: 'empty'
   }
 };

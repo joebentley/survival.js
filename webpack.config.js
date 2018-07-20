@@ -1,3 +1,7 @@
+/**
+ * Webpack config for main deployment
+ */
+
 const path = require('path');
 
 module.exports = {
