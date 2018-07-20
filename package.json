@@ -8,16 +8,17 @@
     "@babel/polyfill": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
     "babel-loader": "^8.0.0-beta",
+    "css-loader": "^1.0.0",
+    "mocha": "^5.2.0",
+    "style-loader": "^0.21.0",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.0.8",
     "webpack-serve": "^2.0.2"
   },
   "scripts": {
-    "serve": "webpack-serve",
+    "serve": "webpack-serve --content public",
+    "serve-tests": "webpack-serve ./webpack.test.config.js --content tests",
     "build": "webpack",
     "gh-pages": "yarn run build && cp -r public/* docs && cp dist/bundle.js docs"
-  },
-  "serve": {
-    "content": "public"
   }
 }
