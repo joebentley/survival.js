@@ -126,11 +126,9 @@ window.onload = () => {
 
   document.addEventListener('keydown', (event) => {
     pressedKeys.add(event.key);
-    event.preventDefault();
   });
 
   document.addEventListener('keyup', (event) => {
     pressedKeys.delete(event.key);
-    event.preventDefault();
   });
 };
