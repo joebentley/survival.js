@@ -1,5 +1,5 @@
 
-import {Font, fontText} from './font';
+import {Font} from './font';
 import {CHAR_WIDTH, CHAR_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT, Point} from './point';
 import {World} from './world';
 import {Player} from './player';
@@ -39,11 +39,6 @@ const loop = (state, time) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     world.draw(font, state);
-
-    // font.drawChar(...Point.fromGridToScreen(2, 2), 'dwarf');
-    // font.drawText(...Point.fromGridToScreen(2, 2), 'A happy dwarf $(dwarf)! woo!');
-    // font.drawText(...Point.fromGridToScreen(2, 2),
-    //   fontText.fColor('red').text('A happy ').bColor('yellow').text('dwarf $(dwarf)!').reset().text(' woo!'));
 
     for (let entity of entities) {
       entity.draw(font, state);

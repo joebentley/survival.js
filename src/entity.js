@@ -3,7 +3,7 @@ import {Point, SCENE_HEIGHT, SCENE_WIDTH} from './point';
 
 export class Entity {
   constructor(worldPos, graphic) {
-    this.worldPos = worldPos.round();
+    this.worldPos = (worldPos || new Point(0, 0)).round();
     this.graphic = graphic;
     this.behaviours = [];
   }
@@ -13,7 +13,7 @@ export class Entity {
       Math.floor(playerWorldPos.x / SCENE_WIDTH),
       Math.floor(playerWorldPos.y / SCENE_HEIGHT));
 
-    return this.worldPos.x > scenePos.x * SCENE_WIDTH && this.worldPos.y > scenePos.y * SCENE_HEIGHT
+    return this.worldPos.x >= scenePos.x * SCENE_WIDTH && this.worldPos.y >= scenePos.y * SCENE_HEIGHT
       && this.worldPos.x < (scenePos.x + 1) * SCENE_WIDTH && this.worldPos.y < (scenePos.y + 1) * SCENE_HEIGHT;
 
   }
