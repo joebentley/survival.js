@@ -1,13 +1,13 @@
 /**
- * Webpack config for running test suite
+ * Webpack config for running test suite in browser
  */
 
 const path = require('path');
 
 module.exports = {
-  entry: ['./tests/run.js'],
+  entry: ['./tests/browser/run.js'],
   output: {
-    path: path.resolve(__dirname, 'tests/dist'),
+    path: path.resolve(__dirname, 'tests/browser/dist'),
     filename: 'bundle.js'
   },
   mode: 'development',

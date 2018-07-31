@@ -19,7 +19,7 @@
   },
   "scripts": {
     "serve": "webpack-serve --content public",
-    "serve-tests": "webpack-serve ./webpack.test.config.js --content tests",
+    "serve-tests": "webpack-serve ./webpack.test.config.js --content tests/browser",
     "build": "webpack",
     "gh-pages": "yarn run build && cp -r public/* docs && cp dist/bundle.js docs"
   }
