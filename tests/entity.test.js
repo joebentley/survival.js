@@ -1,5 +1,6 @@
 import {assert} from 'chai';
 
+// Check if in browser environment
 if (typeof window !== 'undefined')
   mocha.setup('bdd');
 
