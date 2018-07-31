@@ -1,5 +1,7 @@
 import {assert} from 'chai';
-mocha.setup('bdd');
+
+if (typeof window !== 'undefined')
+  mocha.setup('bdd');
 
 import {Entity} from '../src/entity';
 import {Point, SCENE_HEIGHT, SCENE_WIDTH} from '../src/point';
