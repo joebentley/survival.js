@@ -58,8 +58,16 @@ export class Cat extends Entity {
   }
 }
 
-// Creates a clone of entity, optionally updates it using the update callback
-// then replaces entity with the new, updated, clone entity in entityList
+/**
+ * Creates a clone of entity, optionally updates it using the update callback
+ * then replaces entity with the new, updated, clone entity in entityList
+ * If update is null then the entity won't be altered, but a new instance will
+ * still be created
+ * @param {Entity} entity - Reference to the entity to be copied, updated, and replaced
+ * @param {function(Entity)} update - Entity update function, which can mutate the entity
+ * @param {Array<Entity>} entityList - Current entity list
+ * @returns {Array<Entity>} - New entity list with the new entity
+ */
 export function replaceEntity(entity, update, entityList) {
   let cloned = entity.clone();
 
