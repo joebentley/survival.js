@@ -1,5 +1,7 @@
 const webpackOfflineTestConfig = require('./webpack.offline.test.config');
 
+require('source-map-support').install();
+
 module.exports = function(grunt) {
   grunt.initConfig({
     simplemocha: {

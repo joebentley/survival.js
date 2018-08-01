@@ -21,9 +21,11 @@ const loop = (state, time) => {
   }
 
   if (state.updateEntities) {
+    let newState = {};
     for (let entity of state.entities) {
-      Object.assign(state, entity.update(state));
+      Object.assign(newState, entity.update(state));
     }
+    Object.assign(state, newState);
     state.updateEntities = false;
   }
 
