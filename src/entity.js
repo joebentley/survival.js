@@ -67,7 +67,6 @@ export function replaceEntity(entity, update, entityList) {
     update(cloned);
   }
 
-  let length = entityList.length;
   let newEntityList = entityList.slice().filter(e => e !== entity);
 
   newEntityList.push(cloned);
