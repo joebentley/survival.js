@@ -9,6 +9,9 @@ export class Player extends Entity {
   onInput(key) {
     let posOffset = new Point(0, 0);
 
+    let isUpperCase = key.toLowerCase() !== key;
+    key = key.toLowerCase();
+
     if (key === 'h') posOffset = new Point(-1, 0);
     else if (key === 'l') posOffset = new Point(1, 0);
     else if (key === 'k') posOffset = new Point(0, -1);
@@ -17,6 +20,9 @@ export class Player extends Entity {
     else if (key === 'u') posOffset = new Point(1, -1);
     else if (key === 'b') posOffset = new Point(-1, 1);
     else if (key === 'n') posOffset = new Point(1, 1);
+
+    if (isUpperCase && !posOffset.equals(Point.zero))
+      console.log(`Holding shift and pressing direction ${posOffset.toString()}`);
 
     return {
       player: new Player(this.worldPos.plus(posOffset)),

@@ -14,7 +14,7 @@ const loop = (state, time) => {
   // state updates
 
   for (let key of pressedKeys) {
-    Object.assign(state, state.player.onInput(key));
+    Object.assign(state, state.player.onInput(key, pressedKeys));
     // note: this will automatically do key repeat, as the keydown event will fire and reset pressedKeys
     // each time the key repeat fires!
     pressedKeys.delete(key);

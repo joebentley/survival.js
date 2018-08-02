@@ -30,6 +30,10 @@ export class Point {
     return new Point((this.x % SCENE_WIDTH) * CHAR_WIDTH, (this.y % SCENE_HEIGHT) * CHAR_HEIGHT);
   }
 
+  toString() {
+    return `(${this.x}, ${this.y})`;
+  }
+
   static fromGridToScreen(x, y) {
     return new Point(x, y).toScreenSpace();
   }
