@@ -28,4 +28,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('test', ['webpack', 'simplemocha']);
+  grunt.registerTask('default', 'test');
 };
