@@ -9,10 +9,13 @@ export class Entity {
   }
 
   clone() {
-    let entity = new Entity(this.worldPos, this.graphic);
-    for (let behaviour of this.behaviours) {
-      entity.addBehaviour(behaviour);
+    let entity = new Entity();
+
+    for (let a in this) {
+      if (this.hasOwnProperty(a))
+        entity[a] = this[a];
     }
+
     return entity;
   }
 
@@ -23,10 +26,6 @@ export class Entity {
 
     return this.worldPos.x >= scenePos.x * SCENE_WIDTH && this.worldPos.y >= scenePos.y * SCENE_HEIGHT
       && this.worldPos.x < (scenePos.x + 1) * SCENE_WIDTH && this.worldPos.y < (scenePos.y + 1) * SCENE_HEIGHT;
-  }
-
-  addBehaviour(behaviour) {
-    this.behaviours.push(behaviour);
   }
 
   draw(font, state) {
@@ -50,7 +49,7 @@ export class Cat extends Entity {
   constructor(worldPos) {
     super(worldPos, fontText.fColor('yellow').text('c'));
 
-    this.addBehaviour(wanderingBehaviour);
+    this.behaviours.push(wanderingBehaviour);
   }
 
   clone() {

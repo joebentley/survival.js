@@ -8,6 +8,27 @@ import {Entity, replaceEntity} from '../src/entity';
 import {Point, SCENE_HEIGHT, SCENE_WIDTH} from '../src/point';
 
 describe('Entity', () => {
+  describe('#clone()', () => {
+    it('should deep clone all properties including functions', () => {
+      let entity = new Entity(new Point(1, 2), 'a');
+      entity.test = true;
+      entity.behaviours.push(function(state) {
+        this.b = 10; // generally shouldn't mutate `this`, but it should at least work
+        state.a = 5;
+      });
+
+      let cloned = entity.clone();
+      assert(cloned.worldPos.equals(new Point(1, 2)), 'worldPos should be cloned');
+      assert(cloned.graphic === 'a', 'graphic should be cloned');
+      assert(cloned.test === true, 'test should be cloned');
+
+      let state = cloned.update({});
+
+      assert(state.a === 5, 'state should be altered');
+      assert(cloned.b === 10, 'this should be altered');
+    });
+  });
+
   describe('#isOnScreen()', () => {
     it('should determine if player is on screen or not correctly', () => {
       let entity = new Entity();
@@ -28,11 +49,11 @@ describe('Entity', () => {
   describe('#update()', () => {
     it('should call each behaviour function attached to entity', () => {
       let entity = new Entity();
-      entity.addBehaviour(state => {
+      entity.behaviours.push(state => {
         assert(state.a === 1);
         state.b = 1;
       });
-      entity.addBehaviour(state => {
+      entity.behaviours.push(state => {
         assert(state.b === 1);
         state.c = 1;
       });
@@ -42,7 +63,7 @@ describe('Entity', () => {
 
     it('should bind the entity\'s `this` to the behaviour function on update', () => {
       let entity = new Entity(new Point(2, 2));
-      entity.addBehaviour(function () {
+      entity.behaviours.push(function () {
         assert(this.worldPos.equals(new Point(2, 2)));
       });
       entity.update();
