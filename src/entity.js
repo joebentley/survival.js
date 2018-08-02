@@ -51,10 +51,6 @@ export class Cat extends Entity {
 
     this.behaviours.push(wanderingBehaviour);
   }
-
-  clone() {
-    return new Cat(this.worldPos);
-  }
 }
 
 /**
